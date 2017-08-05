@@ -1,0 +1,9 @@
+[package]
+authors = ["Antoni Boucher <bouanto@zoho.com>"]
+name = "markdown-packtpub-filter"
+version = "0.1.0"
+
+[dependencies]
+chrono = "^0.4.0"
+pandoc = "^0.6.1"
+pandoc_ast = "^0.7.1"
