@@ -1,11 +1,9 @@
-extern crate chrono;
 extern crate pandoc;
 extern crate pandoc_ast;
 
 use std::env;
 use std::path::Path;
 
-use chrono::{Datelike, Local};
 use pandoc::OutputKind;
 use pandoc_ast::{Block, Format, Inline, MutVisitor};
 use pandoc_ast::Block::{Div, Para, Plain};
@@ -42,15 +40,12 @@ impl MutVisitor for Visitor {
     fn visit_block(&mut self, block: &mut Block) {
         let mut state = Other;
         if let Para(ref mut inlines) = *block {
-            if let Some(inline) = inlines.first_mut() {
+            if let Some(inline) = inlines.first() {
                 match inline {
-                    &mut Image(_, _, (ref mut url, _)) => {
-                        let now = Local::today();
-                        *url = format!("https://packt-type-cloud.s3.amazonaws.com/uploads/sites/1760/{}/{:02}/{}",
-                           now.year(), now.month(), url);
+                    &Image(_, _, _) => {
                         state = IsImage;
                     },
-                    &mut Strong(ref inlines) => {
+                    &Strong(ref inlines) => {
                         if inlines.get(0) == Some(&Str("Note:".to_string())) {
                             state = IsNote;
                         }
